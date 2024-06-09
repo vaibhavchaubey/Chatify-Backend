@@ -6,24 +6,27 @@ import {
   newUser,
   searchUser,
 } from '../controllers/user.controller.js';
-import { multerUpload } from '../middlewares/multer.middleware.js';
+import {
+  multerUpload,
+  singleAvatar,
+} from '../middlewares/multer.middleware.js';
 import { isAuthenticated } from '../middlewares/auth.middleware.js';
 
-const app = Router();
+const router = Router();
 
-app.route('/new').post(multerUpload.single('avatar'), newUser);
-app.route('/login').post(login);
+router.route('/new').post(singleAvatar, newUser);
+router.route('/login').post(login);
 
 // After here user must be logged in to access the routes
 
 // Apply isAuthenticated middleware to all routes after this
 
-app.use(isAuthenticated);
+router.use(isAuthenticated);
 
-app.route('/me').get(getMyProfile);
+router.route('/me').get(getMyProfile);
 
-app.route('/logout').post(logout);
+router.route('/logout').post(logout);
 
-app.route('/search').post(searchUser);
+router.route('/search').post(searchUser);
 
-export default app;
+export default router;

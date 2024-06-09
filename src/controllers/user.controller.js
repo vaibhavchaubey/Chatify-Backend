@@ -67,7 +67,7 @@ const searchUser = TryCatch(async (req, res) => {
 
   return res.status(200).json({
     success: true,
-    messaage: 'Logged out successfully',
+    messaage: name,
   });
 });
 
