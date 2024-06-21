@@ -14,6 +14,15 @@ import {
   sendAttachment,
 } from '../controllers/chat.controller.js';
 import { attachmentsMulter } from '../middlewares/multer.middleware.js';
+import {
+  addMemberValidator,
+  chatIdValidator,
+  newGroupValidator,
+  removeMemberValidator,
+  renameValidator,
+  sendAttachmentsValidator,
+  validateHandler,
+} from '../../lib/validators.js';
 
 const router = Router();
 
@@ -21,15 +30,34 @@ const router = Router();
 
 router.use(isAuthenticated);
 
-router.route('/new').post(newGroupChat);
+router.route('/new').post(newGroupValidator(), validateHandler, newGroupChat);
 router.route('/my').get(getMyChats);
 router.route('/my/groups').get(getMyGroups);
-router.route('/addmembers').put(addMembers);
-router.route('/removemember').put(removeMember);
-router.route('/leave/:id').delete(leaveGroup);
-router.route('/message').post(attachmentsMulter, sendAttachment);
-router.route('/message/:id').get(getMessages);
+router
+  .route('/addmembers')
+  .put(addMemberValidator(), validateHandler, addMembers);
+router
+  .route('/removemember')
+  .put(removeMemberValidator(), validateHandler, removeMember);
+router
+  .route('/leave/:id')
+  .delete(chatIdValidator(), validateHandler, leaveGroup);
+router
+  .route('/message')
+  .post(
+    attachmentsMulter,
+    sendAttachmentsValidator(),
+    validateHandler,
+    sendAttachment
+  );
+router
+  .route('/message/:id')
+  .get(chatIdValidator(), validateHandler, getMessages);
 
-router.route('/:id').get(getChatDetails).put(renameGroup).delete(deleteChat);
+router
+  .route('/:id')
+  .get(chatIdValidator(), validateHandler, getChatDetails)
+  .put(renameValidator(), validateHandler, renameGroup)
+  .delete(chatIdValidator(), validateHandler, deleteChat);
 
 export default router;

@@ -1,6 +1,10 @@
 import express from 'express';
 import { errorMiddleware } from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
+
+
+/* Seeders */
+
 import { createUser } from './seeders/user.seeder.js';
 import {
   createGroupChats,
@@ -15,6 +19,8 @@ import {
 // createGroupChats(10);
 // createMessages(10);
 // createMessagesInAChat("666618300310dacae8f9d624", 50);
+
+
 
 const app = express();
 

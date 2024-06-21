@@ -3,6 +3,7 @@ import { User } from '../models/user.model.js';
 import { cookieOptions, sendToken } from '../utils/features.js';
 import { TryCatch } from '../middlewares/error.middleware.js';
 import { ErrorHandler } from '../utils/utility.js';
+import { Chat } from '../models/chat.model.js';
 
 // Create a new user and save it to the database and save in cookie
 const newUser = async (req, res) => {
@@ -64,6 +65,9 @@ const logout = TryCatch(async (req, res) => {
 
 const searchUser = TryCatch(async (req, res) => {
   const { name } = req.query;
+
+  const myChats = Chat.find({ groupChat: false, members: req.user });
+  
 
   return res.status(200).json({
     success: true,

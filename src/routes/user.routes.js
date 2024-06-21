@@ -11,11 +11,18 @@ import {
   singleAvatar,
 } from '../middlewares/multer.middleware.js';
 import { isAuthenticated } from '../middlewares/auth.middleware.js';
+import {
+  loginValidator,
+  registerValidator,
+  validateHandler,
+} from '../../lib/validators.js';
 
 const router = Router();
 
-router.route('/new').post(singleAvatar, newUser);
-router.route('/login').post(login);
+router
+  .route('/new')
+  .post(singleAvatar, registerValidator(), validateHandler, newUser);
+router.route('/login').post(loginValidator(), validateHandler, login);
 
 // After here user must be logged in to access the routes
 
