@@ -1,10 +1,14 @@
 import { Router } from 'express';
 import {
+  acceptFriendRequest,
+  getMyFriends,
+  getMyNotifications,
   getMyProfile,
   login,
   logout,
   newUser,
   searchUser,
+  sendFriendRequest,
 } from '../controllers/user.controller.js';
 import {
   multerUpload,
@@ -12,8 +16,10 @@ import {
 } from '../middlewares/multer.middleware.js';
 import { isAuthenticated } from '../middlewares/auth.middleware.js';
 import {
+  acceptRequestValidator,
   loginValidator,
   registerValidator,
+  sendRequestValidator,
   validateHandler,
 } from '../../lib/validators.js';
 
@@ -34,6 +40,18 @@ router.route('/me').get(getMyProfile);
 
 router.route('/logout').post(logout);
 
-router.route('/search').post(searchUser);
+router.route('/search').get(searchUser);
+
+router
+  .route('/sendrequest')
+  .put(sendRequestValidator(), validateHandler, sendFriendRequest);
+
+router
+  .route('/acceptrequest')
+  .put(acceptRequestValidator(), validateHandler, acceptFriendRequest);
+
+router.route('/notifications').get(getMyNotifications);
+
+router.route('/friends').get(getMyFriends);
 
 export default router;
