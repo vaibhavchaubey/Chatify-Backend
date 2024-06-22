@@ -2,7 +2,6 @@ import express from 'express';
 import { errorMiddleware } from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
 
-
 /* Seeders */
 
 import { createUser } from './seeders/user.seeder.js';
@@ -20,8 +19,6 @@ import {
 // createMessages(10);
 // createMessagesInAChat("666618300310dacae8f9d624", 50);
 
-
-
 const app = express();
 
 // using middlewares
@@ -32,10 +29,12 @@ app.use(cookieParser());
 // routes import
 import userRoute from './routes/user.routes.js';
 import chatRoute from './routes/chat.routes.js';
+import adminRoute from './routes/admin.routes.js';
 
 // routes declaration
 app.use('/user', userRoute);
 app.use('/chat', chatRoute);
+app.use('/admin', adminRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

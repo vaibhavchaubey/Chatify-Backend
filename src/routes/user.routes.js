@@ -38,7 +38,7 @@ router.use(isAuthenticated);
 
 router.route('/me').get(getMyProfile);
 
-router.route('/logout').post(logout);
+router.route('/logout').get(logout);
 
 router.route('/search').get(searchUser);
 

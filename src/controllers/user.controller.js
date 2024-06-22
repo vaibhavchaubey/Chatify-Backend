@@ -9,7 +9,7 @@ import { ErrorHandler } from '../utils/utility.js';
 import { getOtherMember } from '../../lib/helper.js';
 
 // Create a new user and save it to the database and save in cookie
-const newUser = async (req, res) => {
+const newUser = TryCatch(async (req, res) => {
   const { name, username, password, bio } = req.body;
 
   const avatar = {
@@ -26,7 +26,7 @@ const newUser = async (req, res) => {
   });
 
   sendToken(res, user, 201, 'User created');
-};
+});
 
 // Login user and save token in cookie
 const login = TryCatch(async (req, res, next) => {
