@@ -11,7 +11,7 @@ import {
   newGroupChat,
   removeMember,
   renameGroup,
-  sendAttachment,
+  sendAttachments,
 } from '../controllers/chat.controller.js';
 import { attachmentsMulter } from '../middlewares/multer.middleware.js';
 import {
@@ -48,7 +48,7 @@ router
     attachmentsMulter,
     sendAttachmentsValidator(),
     validateHandler,
-    sendAttachment
+    sendAttachments
   );
 router
   .route('/message/:id')

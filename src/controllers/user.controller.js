@@ -9,8 +9,13 @@ import { ErrorHandler } from '../utils/utility.js';
 import { getOtherMember } from '../../lib/helper.js';
 
 // Create a new user and save it to the database and save in cookie
-const newUser = TryCatch(async (req, res) => {
+const newUser = TryCatch(async (req, res, next) => {
   const { name, username, password, bio } = req.body;
+  const file = req.file;
+
+  if(!file) {
+    return next(new ErrorHandler('Please Upload Avatar', 404));
+  }
 
   const avatar = {
     public_id: 'vrwevrwefre',
