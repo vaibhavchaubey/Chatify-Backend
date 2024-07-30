@@ -1,11 +1,11 @@
-import { faker, simpleFaker } from "@faker-js/faker";
-import { Chat } from "../models/chat.model.js";
-import { Message } from "../models/message.model.js";
-import { User } from "../models/user.model.js";
+import { faker, simpleFaker } from '@faker-js/faker';
+import { Chat } from '../models/chat.model.js';
+import { Message } from '../models/message.model.js';
+import { User } from '../models/user.model.js';
 
 const createSingleChats = async (numChats) => {
   try {
-    const users = await User.find().select("_id");
+    const users = await User.find().select('_id');
 
     const chatsPromise = [];
 
@@ -22,7 +22,7 @@ const createSingleChats = async (numChats) => {
 
     await Promise.all(chatsPromise);
 
-    console.log("Chats created successfully");
+    console.log('Chats created successfully');
     process.exit();
   } catch (error) {
     console.error(error);
@@ -32,7 +32,7 @@ const createSingleChats = async (numChats) => {
 
 const createGroupChats = async (numChats) => {
   try {
-    const users = await User.find().select("_id");
+    const users = await User.find().select('_id');
 
     const chatsPromise = [];
 
@@ -62,7 +62,7 @@ const createGroupChats = async (numChats) => {
 
     await Promise.all(chatsPromise);
 
-    console.log("Chats created successfully");
+    console.log('Chats created successfully');
     process.exit();
   } catch (error) {
     console.error(error);
@@ -72,8 +72,8 @@ const createGroupChats = async (numChats) => {
 
 const createMessages = async (numMessages) => {
   try {
-    const users = await User.find().select("_id");
-    const chats = await Chat.find().select("_id");
+    const users = await User.find().select('_id');
+    const chats = await Chat.find().select('_id');
 
     const messagesPromise = [];
 
@@ -92,7 +92,7 @@ const createMessages = async (numMessages) => {
 
     await Promise.all(messagesPromise);
 
-    console.log("Messages created successfully");
+    console.log('Messages created successfully');
     process.exit();
   } catch (error) {
     console.error(error);
@@ -102,7 +102,7 @@ const createMessages = async (numMessages) => {
 
 const createMessagesInAChat = async (chatId, numMessages) => {
   try {
-    const users = await User.find().select("_id");
+    const users = await User.find().select('_id');
 
     const messagesPromise = [];
 
@@ -120,7 +120,7 @@ const createMessagesInAChat = async (chatId, numMessages) => {
 
     await Promise.all(messagesPromise);
 
-    console.log("Messages created successfully");
+    console.log('Messages created successfully');
     process.exit();
   } catch (error) {
     console.error(error);
