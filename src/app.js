@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from './constants/event.js';
 import { getSockets } from '../lib/helper.js';
 import { Message } from './models/message.model.js';
+import cors from 'cors';
 
 /* Seeders */
 
@@ -34,6 +35,17 @@ const userSocketIDs = new Map(``);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:4173',
+      process.env.CLIENT_URL,
+    ],
+    credentials: true,
+  })
+);
 
 // routes import
 import userRoute from './routes/user.routes.js';
@@ -41,17 +53,15 @@ import chatRoute from './routes/chat.routes.js';
 import adminRoute from './routes/admin.routes.js';
 
 // routes declaration
-app.use('/user', userRoute);
-app.use('/chat', chatRoute);
-app.use('/admin', adminRoute);
+app.use('/api/v1/user', userRoute);
+app.use('/api/v1/chat', chatRoute);
+app.use('/api/v1/admin', adminRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-io.use((socket, next)=>{
-  
-})
+io.use((socket, next) => {});
 
 io.on('connection', (socket) => {
   const user = {
