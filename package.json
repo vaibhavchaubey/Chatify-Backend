@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "SET NODE_ENV=PRODUCTION &&node src/index.js",
+    "start": "SET NODE_ENV=PRODUCTION && node src/index.js",
     "dev": "SET NODE_ENV=DEVELOPMENT && nodemon src/index.js"
   },
   "author": "",

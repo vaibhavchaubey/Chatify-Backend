@@ -7,6 +7,7 @@ import { User } from '../models/user.model.js';
 import { cookieOptions, emitEvent, sendToken } from '../utils/features.js';
 import { ErrorHandler } from '../utils/utility.js';
 import { getOtherMember } from '../../lib/helper.js';
+import { uploadFilesToCloudinary } from '../utils/cloudinary.js';
 
 // Create a new user and save it to the database and save in cookie
 const newUser = TryCatch(async (req, res, next) => {
