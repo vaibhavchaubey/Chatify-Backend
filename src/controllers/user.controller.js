@@ -74,7 +74,7 @@ const logout = TryCatch(async (req, res, next) => {
     .cookie('chatify-token', '', { ...cookieOptions, maxAge: 0 })
     .json({
       success: true,
-      messaage: 'Logged out successfully',
+      message: 'Logged out successfully',
     });
 });
 

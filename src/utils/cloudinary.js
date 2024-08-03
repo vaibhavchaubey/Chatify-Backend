@@ -4,13 +4,6 @@ import { getBase64 } from '../../lib/helper.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-console.log('Configuring Cloudinary...');
-console.log(
-  process.env.CLOUDINARY_CLOUD_NAME,
-  process.env.CLOUDINARY_API_KEY,
-  process.env.CLOUDINARY_API_SECRET
-);
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
