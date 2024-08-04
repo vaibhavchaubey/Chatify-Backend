@@ -36,7 +36,7 @@ const adminLogout = TryCatch(async (req, res, next) => {
     .cookie('chatify-admin-token', '', { ...cookieOptions, maxAge: 0 })
     .json({
       success: true,
-      messaage: 'Logged Out successfully',
+      message: 'Logged Out successfully',
     });
 });
 

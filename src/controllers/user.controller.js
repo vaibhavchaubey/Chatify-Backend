@@ -129,7 +129,7 @@ const sendFriendRequest = TryCatch(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
-    messaage: 'Freind Request Sent',
+    message: 'Freind Request Sent',
   });
 });
 
@@ -154,7 +154,7 @@ const acceptFriendRequest = TryCatch(async (req, res, next) => {
     await request.deleteOne();
     return res.status(200).json({
       success: true,
-      messaage: 'Friend Request Rejected',
+      message: 'Friend Request Rejected',
     });
   }
 
@@ -172,7 +172,7 @@ const acceptFriendRequest = TryCatch(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
-    messaage: 'Freind Request Accepted',
+    message: 'Freind Request Accepted',
     senderId: request.sender._id,
   });
 });
