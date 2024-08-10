@@ -8,6 +8,8 @@ import { NEW_MESSAGE, NEW_MESSAGE_ALERT } from './constants/event.js';
 import { getSockets } from '../lib/helper.js';
 import { Message } from './models/message.model.js';
 import cors from 'cors';
+import { corsOptions } from './constants/config.js';
+import { socketAuthenticator } from './middlewares/auth.middleware.js';
 
 /* Seeders */
 
@@ -27,7 +29,7 @@ import cors from 'cors';
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server, {});
+const io = new Server(server, { cors: corsOptions });
 
 const userSocketIDs = new Map(``);
 
@@ -35,17 +37,7 @@ const userSocketIDs = new Map(``);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:4173',
-      process.env.CLIENT_URL,
-    ],
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
 
 // routes import
 import userRoute from './routes/user.routes.js';
@@ -61,21 +53,20 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-io.use((socket, next) => {});
+io.use((socket, next) => {
+  cookieParser()(
+    socket.request,
+    socket.request.res,
+    async (err) => await socketAuthenticator(err, socket, next)
+  );
+});
 
 io.on('connection', (socket) => {
-  const user = {
-    _id: 'fwgrnhyt',
-    name: 'user123',
-  };
+  const user = socket.user;
   userSocketIDs.set(user._id.toString(), socket.id);
 
-  // console.log('User connected', socket.id);
-
-  console.log(userSocketIDs);
-
   socket.on(NEW_MESSAGE, async ({ chatId, members, message }) => {
-    const messageForRealtime = {
+    const messageForRealTime = {
       content: message,
       _id: uuid(),
       sender: {
@@ -93,25 +84,20 @@ io.on('connection', (socket) => {
     };
 
     const membersSocket = getSockets(members);
-
     io.to(membersSocket).emit(NEW_MESSAGE, {
       chatId,
-      message: messageForRealtime,
+      message: messageForRealTime,
     });
-
-    io.to(membersSocket).emit(NEW_MESSAGE_ALERT, {
-      chatId,
-    });
+    io.to(membersSocket).emit(NEW_MESSAGE_ALERT, { chatId });
 
     try {
       await Message.create(messageForDB);
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     }
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
     userSocketIDs.delete(user._id.toString());
   });
 });

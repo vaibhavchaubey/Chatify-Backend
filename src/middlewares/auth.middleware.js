@@ -3,9 +3,10 @@ import { ErrorHandler } from '../utils/utility.js';
 import { TryCatch } from './error.middleware.js';
 import { User } from '../models/user.model.js';
 import { adminSecretKey } from '../index.js';
+import { CHATIFY_TOKEN } from '../constants/config.js';
 
 const isAuthenticated = TryCatch(async (req, res, next) => {
-  const token = req.cookies['chatify-token'];
+  const token = req.cookies[CHATIFY_TOKEN];
 
   if (!token) {
     return next(new ErrorHandler('Please login to access this route', 401));
@@ -42,4 +43,32 @@ const adminOnly = TryCatch(async (req, res, next) => {
   next();
 });
 
-export { isAuthenticated, adminOnly };
+const socketAuthenticator = async (err, socket, next) => {
+  try {
+    if (err) {
+      return next(err);
+    }
+    const authToken = socket.request.cookies[CHATIFY_TOKEN];
+
+    if (!authToken) {
+      return next(new ErrorHandler('Please login to access this route', 401));
+    }
+
+    const decodedData = jwt.verify(authToken, process.env.JWT_SECRET);
+
+    const user = await User.findById(decodedData?._id);
+
+    if (!user) {
+      return next(new ErrorHandler('Please login to access this route', 401));
+    }
+
+    socket.user = user;
+
+    return next();
+  } catch (error) {
+    console.log(error);
+    return next(new ErrorHandler('Please login to access this route', 401));
+  }
+};
+
+export { isAuthenticated, adminOnly, socketAuthenticator };
