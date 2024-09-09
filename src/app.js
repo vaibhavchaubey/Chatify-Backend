@@ -63,6 +63,8 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
   const user = socket.user;
+
+  // Mapping each user id with its socket id
   userSocketIDs.set(user._id.toString(), socket.id);
 
   socket.on(NEW_MESSAGE, async ({ chatId, members, message }) => {
@@ -84,6 +86,7 @@ io.on('connection', (socket) => {
     };
 
     const membersSocket = getSockets(members);
+
     io.to(membersSocket).emit(NEW_MESSAGE, {
       chatId,
       message: messageForRealTime,
