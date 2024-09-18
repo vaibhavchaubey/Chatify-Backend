@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { getSockets } from '../../lib/helper.js';
 
 const cookieOptions = {
   maxAge: 15 * 24 * 60 * 60 * 1000,
@@ -18,7 +19,11 @@ const sendToken = (res, user, code, message) => {
 };
 
 const emitEvent = (req, event, users, data) => {
-  console.log("Emmiting event", event);
+  let io = req.app.get('io');
+
+  const usersSocket = getSockets(users);
+
+  io.to(usersSocket).emit(event, data);
 };
 
 export { cookieOptions, sendToken, emitEvent };

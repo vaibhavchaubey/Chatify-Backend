@@ -1,7 +1,7 @@
 import { getOtherMember } from '../../lib/helper.js';
 import {
   ALERT,
-  NEW_ATTACHMENT,
+  NEW_MESSAGE,
   NEW_MESSAGE_ALERT,
   REFETCH_CHATS,
 } from '../constants/event.js';
@@ -11,7 +11,10 @@ import { emitEvent } from '../utils/features.js';
 import { ErrorHandler } from '../utils/utility.js';
 import { User } from '../models/user.model.js';
 import { Message } from '../models/message.model.js';
-import { deletFilesFromCloudinary } from '../utils/cloudinary.js';
+import {
+  deletFilesFromCloudinary,
+  uploadFilesToCloudinary,
+} from '../utils/cloudinary.js';
 
 const newGroupChat = TryCatch(async (req, res, next) => {
   const { name, members } = req.body;
@@ -244,8 +247,12 @@ const sendAttachments = TryCatch(async (req, res, next) => {
     return next(new ErrorHandler('Chat not found', 404));
   }
 
+  if (files.length < 1) {
+    return next(new ErrorHandler('Please provide attachments', 400));
+  }
+
   // Upload files here
-  const attachments = [];
+  const attachments = await uploadFilesToCloudinary(files);
 
   const messageForDB = {
     content: '',
@@ -264,7 +271,7 @@ const sendAttachments = TryCatch(async (req, res, next) => {
 
   const message = await Message.create(messageForDB);
 
-  emitEvent(req, NEW_ATTACHMENT, chat.members, {
+  emitEvent(req, NEW_MESSAGE, chat.members, {
     message: messageForRealTime,
     chatId,
   });
