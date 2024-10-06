@@ -26,7 +26,7 @@ const adminLogin = TryCatch(async (req, res, next) => {
     })
     .json({
       status: true,
-      message: 'Authenticated Successfully, Welcome BOSS',
+      message: 'Admin login successful!',
     });
 });
 
@@ -66,7 +66,7 @@ const allUsers = TryCatch(async (req, res) => {
         name,
         username,
         avatar: avatar.url,
-        id: _id,
+        _id,
         groups,
         friends,
       };
@@ -75,7 +75,7 @@ const allUsers = TryCatch(async (req, res) => {
 
   return res.status(200).json({
     status: 'success',
-    transformedUsers,
+    users: transformedUsers,
   });
 });
 
@@ -173,7 +173,7 @@ const getDashboardStats = TryCatch(async (req, res) => {
     usersCount,
     messagesCount,
     totalChatsCount,
-    messageChat: messages,
+    messagesChat: messages,
   };
 
   return res.status(200).json({
