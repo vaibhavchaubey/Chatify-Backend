@@ -1,11 +1,11 @@
+import jwt from 'jsonwebtoken';
+import { adminSecretKey } from '../index.js';
 import { TryCatch } from '../middlewares/error.middleware.js';
 import { Chat } from '../models/chat.model.js';
-import { User } from '../models/user.model.js';
 import { Message } from '../models/message.model.js';
-import { ErrorHandler } from '../utils/utility.js';
-import jwt from 'jsonwebtoken';
+import { User } from '../models/user.model.js';
 import { cookieOptions } from '../utils/features.js';
-import { adminSecretKey } from '../index.js';
+import { ErrorHandler } from '../utils/utility.js';
 
 const adminLogin = TryCatch(async (req, res, next) => {
   const { secretKey } = req.body;
@@ -183,11 +183,11 @@ const getDashboardStats = TryCatch(async (req, res) => {
 });
 
 export {
-  allUsers,
-  allChats,
-  allMessages,
-  getDashboardStats,
   adminLogin,
   adminLogout,
+  allChats,
+  allMessages,
+  allUsers,
   getAdminData,
+  getDashboardStats,
 };

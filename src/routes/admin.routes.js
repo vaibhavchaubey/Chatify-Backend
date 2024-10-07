@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { adminLoginValidator, validateHandler } from '../../lib/validators.js';
 import {
   adminLogin,
   adminLogout,
@@ -8,7 +9,6 @@ import {
   getAdminData,
   getDashboardStats,
 } from '../controllers/admin.controller.js';
-import { adminLoginValidator, validateHandler } from '../../lib/validators.js';
 import { adminOnly } from '../middlewares/auth.middleware.js';
 
 const router = Router();

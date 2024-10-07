@@ -5,8 +5,11 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { v4 as uuid } from 'uuid';
 import {
+  CHAT_JOINED,
+  CHAT_LEAVED,
   NEW_MESSAGE,
   NEW_MESSAGE_ALERT,
+  ONLINE_USERS,
   START_TYPING,
   STOP_TYPING,
 } from './constants/event.js';
@@ -38,7 +41,8 @@ const io = new Server(server, { cors: corsOptions });
 
 app.set('io', io);
 
-const userSocketIDs = new Map(``);
+const userSocketIDs = new Map();
+const onlineUsers = new Set();
 
 // using middlewares
 app.use(express.json());
@@ -119,8 +123,26 @@ io.on('connection', (socket) => {
     socket.to(membersSocket).emit(STOP_TYPING, { chatId });
   });
 
+  socket.on(CHAT_JOINED, ({ userId, members }) => {
+    onlineUsers.add(userId.toString());
+
+    const membersSocket = getSockets(members);
+
+    io.to(membersSocket).emit(ONLINE_USERS, Array.from(onlineUsers));
+  });
+
+  socket.on(CHAT_LEAVED, ({ userId, members }) => {
+    onlineUsers.delete(userId.toString());
+
+    const membersSocket = getSockets(members);
+
+    io.to(membersSocket).emit(ONLINE_USERS, Array.from(onlineUsers));
+  });
+
   socket.on('disconnect', () => {
     userSocketIDs.delete(user._id.toString());
+    onlineUsers.delete(user._id.toString());
+    socket.broadcast.emit(ONLINE_USERS, Array.from(onlineUsers));
   });
 });
 

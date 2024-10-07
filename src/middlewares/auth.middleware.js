@@ -66,7 +66,6 @@ const socketAuthenticator = async (err, socket, next) => {
 
     return next();
   } catch (error) {
-    console.log(error);
     return next(new ErrorHandler('Please login to access this route', 401));
   }
 };

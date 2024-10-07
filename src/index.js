@@ -1,7 +1,5 @@
 import dotenv from 'dotenv';
-console.log('Loading environment variables...');
 dotenv.config({ path: './.env' });
-console.log('Environment variables loaded.');
 
 import { server } from './app.js';
 import connectDB from './db/index.js';
